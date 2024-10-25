@@ -5,17 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Travel Tracker</title>
     <link rel="stylesheet" href="./styles/main.css" />
+    <style>
+      .delete-all-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
+      .btn {
+        background-color: #dc3545;
+        padding: 10px 20px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+      }
+      #add {
+        background-color: green;
+      }
+      #add:hover {
+        background-color: greenyellow;
+      }
+      .btn:hover {
+        background-color: #c82333;
+      }
+    </style>
   </head>
 
   <body>
-    <form action="/add" method="post">
+    <div class="delete-all-container">
+      <form action="/deleteall" method="post">
+        <button type="submit" class="btn">Delete All</button>
+      </form>
+    </div>
+
+    <form action="/add" method="post" style="display: inline-block">
       <input
         type="text"
         name="country"
         autofocus
         placeholder="<%= locals.error ? error :  'Enter country name'%>"
       />
-      <button type="submit">Add</button>
+      <button class="btn" id="add" type="submit">Add</button>
+    </form>
+
+    <form action="/delete" method="post" style="display: inline-block">
+      <input
+        type="text"
+        name="country"
+        placeholder="<%= locals.error ? error :  'Enter country name'%>"
+      />
+      <button class="btn" type="submit">Delete</button>
     </form>
 
     <section class="ag-canvas">
@@ -910,10 +952,19 @@
     </section>
     <h2 class="total-count">Total Countries: <%=total%></h2>
     <script>
-      const country_codes = "<%= countries %>".split(",");
-      console.log(typeof "<%= countries %>");
+      const country_codes = "<%= countries %>"
+        .split(",")
+        .filter((code) => code !== "");
+
+      const allCountries = document.querySelectorAll("path");
+      allCountries.forEach((country) => {
+        country.style.fill = "#383d46";
+      });
       country_codes.forEach((code) => {
-        document.getElementById(code).style.fill = "teal";
+        const country = document.getElementById(code);
+        if (country) {
+          country.style.fill = "#2e8b57"; // Sea Green color
+        }
       });
     </script>
   </body>
